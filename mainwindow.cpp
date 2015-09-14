@@ -31,8 +31,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->videoLabel, SIGNAL(leftKeyReleased()), this, SLOT(videoLeftKeyReleased()));
     QObject::connect(ui->videoLabel, SIGNAL(rightKeyPressed()), this, SLOT(videoRightKeyPressed()));
     QObject::connect(ui->videoLabel, SIGNAL(rightKeyReleased()), this, SLOT(videoRightKeyReleased()));
-    QObject::connect(this, SIGNAL(startStream()), ui->videoLabel, SLOT(startStream()));
-    QObject::connect(this, SIGNAL(stopStream()), ui->videoLabel, SLOT(stopStream()));
+    QObject::connect(this, SIGNAL(startStream()), ui->videoLabel, SLOT(startStreaming()));
+    QObject::connect(this, SIGNAL(stopStream()), ui->videoLabel, SLOT(stopStreaming()));
 
     //JJV DEBUG - There seems to be a bug of some sorts with using openCV in Qt where I MUST do a dummy call to cvtColor() before it actually works properly
     cv::Mat dummyFrame(10,10,CV_8UC3, cv::Scalar(0,0,0));
@@ -158,6 +158,7 @@ void MainWindow::on_actionPlayVideo_triggered()
 
 void MainWindow::on_actionStopVideo_triggered()
 {
+  addDebug("Stop video");
   emit stopStream();
 }
 
