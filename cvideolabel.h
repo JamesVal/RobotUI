@@ -36,11 +36,10 @@ signals:
   void leftKeyReleased(void);
   void rightKeyPressed(void);
   void rightKeyReleased(void);
-  void endStream(void);
 
 public slots:
-  void startStream(void);
-  void stopStream(void);
+  void startStreaming(void);
+  void stopStreaming(void);
 
 private:
   int xInitialCoord;
@@ -51,7 +50,7 @@ private:
   Qt::Key moveLeftKey;
   Qt::Key moveRightKey;
   QThread* thread;
-  OPENCV_HANDLER* openCVObj;
+  OPENCV_HANDLER* openCVObj; 
 
 private slots:
   void updateImage(QPixmap curImage);

@@ -30,8 +30,6 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void addDebug(char *dbgStr);
-    int verifyIPAddr(char *IPADDR);
-    QTcpSocket curSocket;
 
 signals:
     void startStream(void);
@@ -40,8 +38,6 @@ signals:
 private slots:
     void on_actionAdd_IP_Address_triggered();
     void on_actionSend_Data_triggered();
-    void socketOnConnect(void);
-    void socketReadyRead(void);
 
     void on_actionPlayVideo_triggered();
     void on_actionStopVideo_triggered();
@@ -62,10 +58,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    std::vector<unsigned char> pollData;
-    std::vector<unsigned char> rcvData;
-    std::vector<unsigned char> bigBuffer;
-    COMMAND_HANDLER commandHandler;
 
 };
 

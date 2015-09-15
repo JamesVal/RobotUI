@@ -15,6 +15,8 @@ class OPENCV_HANDLER : public QObject
   Q_OBJECT
 
 public:
+  explicit OPENCV_HANDLER(void);
+  void startStream();
   void stopStream();
 
 public slots:
@@ -26,7 +28,19 @@ signals:
   void imageReady(QPixmap curImage);
 
 private:
+  typedef enum {
+    WAIT_FOR_START_CMD,
+    INITIALIZE_CAM,
+    GET_FRAME,
+    CHECK_STOP,
+    CLEAR_INTERFACE,
+    ERROR_STATE
+  } OPEN_CV_STATE;
+
+  OPEN_CV_STATE curState;
+
   int playVideoLoop;
+
 };
 
 

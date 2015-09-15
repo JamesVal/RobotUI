@@ -4,7 +4,10 @@
 
 #include "opencvHandle.h"
 
-//JJV DEBUG - REWRITE THIS PROCESS
+OPENCV_HANDLER::OPENCV_HANDLER(void)
+{
+  this->curState = WAIT_FOR_START_CMD;
+}
 
 void OPENCV_HANDLER::process()
 {
@@ -13,44 +16,68 @@ void OPENCV_HANDLER::process()
   int w,h;
   cv::VideoCapture *videoStream;
 
-  printf("Play Video");
-
-  videoStream = new cv::VideoCapture(0);
-
-  if ( !videoStream->isOpened() )
+  for (;;)
   {
-      printf("Capture failed!");
-      delete videoStream;
-      emit error("No capture");
-      return;
-  }
-
-  playVideoLoop = 1;
-
-  while (playVideoLoop)
-  {
-    //This seems to be really slow and the interface because unresponsive..we'll probably have to limit these calls a little bit
-    *videoStream >> incFrame;
-
-    if ( !incFrame.empty() )
+    switch ( this->curState )
     {
-      //Convert the Mat object to something QT understands
-      cv::cvtColor(incFrame,newFrame,CV_BGR2RGB);
-      imgToShow = QPixmap::fromImage(QImage((unsigned char*) newFrame.data, newFrame.cols, newFrame.rows, QImage::Format_RGB888));
-      emit imageReady(imgToShow);
-      incFrame.release();
+      case WAIT_FOR_START_CMD:
+        if (this->playVideoLoop) this->curState = INITIALIZE_CAM;
+        break;
+
+      case INITIALIZE_CAM:
+        videoStream = new cv::VideoCapture(0);
+
+        if ( !videoStream->isOpened() )
+        {
+            printf("Capture failed!");
+            delete videoStream;
+            emit error("No capture");
+            this->curState = ERROR_STATE;
+        }
+        this->curState = GET_FRAME;
+        break;
+
+      case GET_FRAME:
+        *videoStream >> incFrame;
+
+        if ( !incFrame.empty() )
+        {
+          //Convert the Mat object to something QT understands
+          cv::cvtColor(incFrame,newFrame,CV_BGR2RGB);
+          imgToShow = QPixmap::fromImage(QImage((unsigned char*) newFrame.data, newFrame.cols, newFrame.rows, QImage::Format_RGB888));
+          emit imageReady(imgToShow);
+          incFrame.release();
+        }
+
+        this->curState = CHECK_STOP;
+        break;
+
+      case CHECK_STOP:
+        if (this->playVideoLoop == 0) this->curState = CLEAR_INTERFACE;
+        else this->curState = GET_FRAME;
+        break;
+
+      case CLEAR_INTERFACE:
+        videoStream->release();
+        delete videoStream;
+        this->curState = WAIT_FOR_START_CMD;
+        break;
+
+      case ERROR_STATE:
+        this->playVideoLoop = 0;
+        break;
     }
   }
-
-  videoStream->release();
-  delete videoStream;
-
-  printf("End Video");
 
   emit finished();
 }
 
+void OPENCV_HANDLER::startStream(void)
+{
+    this->playVideoLoop = 1;
+}
+
 void OPENCV_HANDLER::stopStream(void)
 {
-    playVideoLoop = 0;
+    this->playVideoLoop = 0;
 }
