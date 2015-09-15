@@ -7,6 +7,7 @@
 OPENCV_HANDLER::OPENCV_HANDLER(void)
 {
   this->curState = WAIT_FOR_START_CMD;
+  this->playVideoLoop = 0;
 }
 
 void OPENCV_HANDLER::process()
