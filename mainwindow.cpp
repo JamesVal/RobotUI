@@ -10,10 +10,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     //Initialize all necessary variables
-    ui->addIPBtn->setDefaultAction(ui->actionAdd_IP_Address);
-    ui->sendDataBtn->setDefaultAction(ui->actionSend_Data);
-    ui->playVideoBtn->setDefaultAction(ui->actionPlayVideo);
-    ui->stopVideoBtn->setDefaultAction(ui->actionStopVideo);
+    ui->conIPBtn->setDefaultAction(ui->actConIPAddr);
+    ui->sendDataBtn->setDefaultAction(ui->actSendData);
+    ui->playVideoBtn->setDefaultAction(ui->actPlayVideo);
+    ui->stopVideoBtn->setDefaultAction(ui->actStopVideo);
 
     //Setup signals and slots for objects not on the screen!
     QObject::connect(ui->videoLabel, SIGNAL(leftClick()), this, SLOT(videoLeftClick()));
@@ -29,10 +29,10 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->videoLabel, SIGNAL(leftKeyReleased()), this, SLOT(videoLeftKeyReleased()));
     QObject::connect(ui->videoLabel, SIGNAL(rightKeyPressed()), this, SLOT(videoRightKeyPressed()));
     QObject::connect(ui->videoLabel, SIGNAL(rightKeyReleased()), this, SLOT(videoRightKeyReleased()));
-    QObject::connect(this, SIGNAL(startStream()), ui->videoLabel, SLOT(startStreaming()));
-    QObject::connect(this, SIGNAL(stopStream()), ui->videoLabel, SLOT(stopStreaming()));
+    QObject::connect(ui->actPlayVideo,SIGNAL(triggered()),ui->videoLabel,SLOT(startStreaming()));
+    QObject::connect(ui->actStopVideo,SIGNAL(triggered()),ui->videoLabel,SLOT(stopStreaming()));
 
-    //JJV DEBUG - There seems to be a bug of some sorts with using openCV in Qt where I MUST do a dummy call to cvtColor() before it actually works properly
+    //JJV DEBUG - There seems to be a bug of some sorts with using OpenCV in Qt where I MUST do a dummy call to cvtColor() before it actually works properly
     cv::Mat dummyFrame(10,10,CV_8UC3, cv::Scalar(0,0,0));
     cv::cvtColor(dummyFrame,dummyFrame,CV_BGR2RGB);
 
@@ -50,12 +50,12 @@ void MainWindow::addDebug(char *dbgStr)
     ui->dbgTextEdit->append(dbgStr);
 }
 
-void MainWindow::on_actionAdd_IP_Address_triggered()
+void MainWindow::on_actConIPAddr_triggered()
 {
-  addDebug("Setup IP Address");
+  addDebug("Connect to IP Address");
 }
 
-void MainWindow::on_actionSend_Data_triggered()
+void MainWindow::on_actSendData_triggered()
 {
   addDebug("Send Data");
 /*
@@ -72,16 +72,14 @@ void MainWindow::on_actionSend_Data_triggered()
 */
 }
 
-void MainWindow::on_actionPlayVideo_triggered()
+void MainWindow::on_actPlayVideo_triggered()
 { 
   addDebug("Start video");
-  emit startStream();
 }
 
-void MainWindow::on_actionStopVideo_triggered()
+void MainWindow::on_actStopVideo_triggered()
 {
   addDebug("Stop video");
-  emit stopStream();
 }
 
 void MainWindow::videoLeftClick(void)

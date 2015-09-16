@@ -32,15 +32,13 @@ public:
     void addDebug(char *dbgStr);
 
 signals:
-    void startStream(void);
-    void stopStream(void);
 
 private slots:
-    void on_actionAdd_IP_Address_triggered();
-    void on_actionSend_Data_triggered();
+    void on_actConIPAddr_triggered();
+    void on_actSendData_triggered();
 
-    void on_actionPlayVideo_triggered();
-    void on_actionStopVideo_triggered();
+    void on_actPlayVideo_triggered();
+    void on_actStopVideo_triggered();
 
     void videoLeftClick(void);
     void videoRightClick(void);

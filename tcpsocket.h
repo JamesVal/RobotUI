@@ -10,7 +10,7 @@ class TCPSocket : public QObject
 {
 public:
   TCPSocket();
-  int setIPAddress(QString newIP);
+  int ConnectToIPAddress(QString newIP);
 
 public slots:
   void socketOnConnect(void);

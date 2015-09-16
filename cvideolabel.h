@@ -44,7 +44,6 @@ public slots:
 private:
   int xInitialCoord;
   int yInitialCoord;
-  int forwardKeyState;
   Qt::Key moveForwardKey;
   Qt::Key moveBackwardKey;
   Qt::Key moveLeftKey;

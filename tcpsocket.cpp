@@ -7,11 +7,10 @@ TCPSocket::TCPSocket()
   connect(this->curSocket, SIGNAL(readyRead()), this, SLOT(socketReadyRead()));
 }
 
-int TCPSocket::setIPAddress(QString newIP)
+int TCPSocket::ConnectToIPAddress(QString newIP)
 {
 
-  //QHostAddress myHost(dbgStr);
-  QHostAddress myHost("127.0.0.1");//JJV DEBUG
+  QHostAddress myHost(newIP.toStdString().c_str());
 
   char tempBfr[64];
 
@@ -77,4 +76,5 @@ void TCPSocket::socketReadyRead(void)
     }
 }
 
+//JJV DEBUG - will need something to close connections
 

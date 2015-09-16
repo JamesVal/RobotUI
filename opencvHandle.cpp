@@ -4,6 +4,8 @@
 
 #include "opencvHandle.h"
 
+//JJV DEBUG - There seems to be a bug with either Linux or my OpenCV version because I cannot release the capture instance properly (webcam appears to still be in use)
+
 OPENCV_HANDLER::OPENCV_HANDLER(void)
 {
   this->curState = WAIT_FOR_START_CMD;
