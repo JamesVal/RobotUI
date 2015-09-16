@@ -4,6 +4,7 @@
 cVideoLabel::cVideoLabel(QWidget *parent) :
   QLabel(parent)
 {
+  //Need this to allow the object to track mouse events
   setFocusPolicy(Qt::ClickFocus);
 
   //JJV DEBUG - hardcoded stuff
